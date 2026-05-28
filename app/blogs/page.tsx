@@ -1,6 +1,9 @@
 import Link from "next/link"
 import { getBlogs } from "../services/blogs"
 
+const normalizeSearchText = (value: string) =>
+  value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim()
+
 const Blogs = async ({
   searchParams,
 }: {
@@ -8,8 +11,12 @@ const Blogs = async ({
 }) => {
   const { filter } = await searchParams
   const blogs = await getBlogs()
-  const filteredBlogs = filter
-    ? blogs.filter((b) => b.title.toLowerCase().includes(filter.toLowerCase()))
+  const searchTerms = filter ? normalizeSearchText(filter).split(/\s+/) : []
+  const filteredBlogs = searchTerms.length
+    ? blogs.filter((blog) => {
+        const normalizedTitle = normalizeSearchText(blog.title)
+        return searchTerms.some((term) => normalizedTitle.includes(term))
+      })
     : blogs
 
   return (
