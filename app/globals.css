@@ -179,3 +179,115 @@
   font-size: 0.85rem;
   content: "✦";
 }
+
+.homepage-markdown,
+.markdown {
+  border-top: 1px solid var(--color-hairline);
+  padding-top: 3rem;
+}
+
+.homepage-markdown > :first-child,
+.markdown > :first-child {
+  margin-top: 0;
+}
+
+.homepage-markdown h1,
+.homepage-markdown h2,
+.homepage-markdown h3,
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+  color: var(--color-cream);
+}
+
+.homepage-markdown h1,
+.markdown h1 {
+  margin: 0 0 2.25rem;
+  font-size: clamp(3.25rem, 9vw, 7.5rem);
+}
+
+.homepage-markdown h2,
+.markdown h2 {
+  margin: 3.2rem 0 1rem;
+  font-size: clamp(2rem, 4.8vw, 3.4rem);
+}
+
+.homepage-markdown h3,
+.markdown h3 {
+  margin: 2.1rem 0 0.8rem;
+  font-size: clamp(1.45rem, 2.8vw, 2rem);
+  color: var(--color-copper-bright);
+}
+
+.homepage-markdown p,
+.homepage-markdown li,
+.markdown p,
+.markdown li {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  line-height: 1.7;
+  color: var(--color-cream-muted);
+}
+
+.homepage-markdown p,
+.markdown p {
+  margin: 1rem 0;
+  max-width: 72ch;
+}
+
+.homepage-markdown a,
+.markdown a {
+  color: var(--color-copper);
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+  text-decoration-thickness: 1px;
+  transition: color 300ms var(--ease-base);
+}
+
+.homepage-markdown a:hover,
+.markdown a:hover {
+  color: var(--color-copper-bright);
+}
+
+.homepage-markdown ul,
+.homepage-markdown ol,
+.markdown ul,
+.markdown ol {
+  margin: 1.2rem 0;
+  padding-left: 1.6rem;
+}
+
+.homepage-markdown ul,
+.markdown ul {
+  list-style: square;
+}
+
+.homepage-markdown li,
+.markdown li {
+  margin: 0.45rem 0;
+}
+
+.homepage-markdown hr,
+.markdown hr {
+  margin: 2.4rem 0;
+  border: none;
+  border-top: 1px solid var(--color-hairline);
+}
+
+@media (max-width: 768px) {
+  .homepage-markdown p,
+  .homepage-markdown li,
+  .markdown p,
+  .markdown li {
+    font-size: 1.08rem;
+  }
+
+  .homepage-markdown h1,
+  .markdown h1 {
+    margin-bottom: 1.6rem;
+  }
+}
