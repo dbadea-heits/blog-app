@@ -4,6 +4,8 @@ import bcrypt from "bcryptjs"
 import { db } from "@/db"
 import { users } from "@/db/schema"
 import { eq } from "drizzle-orm"
+import { getCurrentUser } from "@/app/services/session"
+import { revalidatePath } from "next/cache"
 
 export type RegisterFormState = {
   errors?: {
@@ -80,4 +82,17 @@ export async function registerUser(
   })
 
   return { success: true }
+}
+
+export async function generateToken() {
+  const user = await getCurrentUser()
+  if (!user) {
+    throw new Error("Unauthorized")
+  }
+
+  const token = crypto.randomUUID()
+
+  await db.update(users).set({ token }).where(eq(users.id, user.id))
+
+  revalidatePath("/me")
 }

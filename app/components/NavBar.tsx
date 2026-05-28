@@ -59,12 +59,15 @@ export function Nav() {
         <div className="flex items-center justify-end gap-6 max-[900px]:justify-start">
           {session ? (
             <>
-              <span className="flex flex-col items-end gap-[0.1rem] leading-tight">
+              <Link
+                href="/me"
+                className="flex flex-col items-end gap-[0.1rem] leading-tight transition-opacity duration-[400ms] hover:opacity-70"
+              >
                 <span className="smallcaps text-warm">signed in</span>
                 <span className="font-serif text-base font-medium italic text-cream">
                   {session.user?.name}
                 </span>
-              </span>
+              </Link>
               <button
                 onClick={() => signOut({ redirectTo: "/" })}
                 className="relative cursor-pointer border-none bg-none py-2 text-[0.85rem] font-normal text-cream-muted transition-colors duration-[400ms] ease-[var(--ease-base)] after:absolute after:inset-x-0 after:bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-copper after:transition-transform after:duration-[400ms] hover:text-copper hover:after:scale-x-100"
