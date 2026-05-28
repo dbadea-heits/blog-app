@@ -4,11 +4,43 @@ import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
 import { addBlog, likeBlog } from "../services/blogs"
 
-export const createBlog = async (formData: FormData) => {
+export type BlogFormState = {
+  errors?: {
+    title?: string[]
+    author?: string[]
+    url?: string[]
+  }
+}
+
+export const createBlog = async (
+  _prevState: BlogFormState,
+  formData: FormData
+): Promise<BlogFormState> => {
   const title = formData.get("title") as string
   const author = formData.get("author") as string
   const url = formData.get("url") as string
-  await addBlog(title, author, url)
+  const userId = formData.get("userId")
+    ? Number(formData.get("userId"))
+    : undefined
+
+  const errors: BlogFormState["errors"] = {}
+
+  // Validation
+  if (!title || title.length < 5) {
+    errors.title = ["Title is required and must be at least 5 characters"]
+  }
+  if (!author || author.length < 5) {
+    errors.author = ["Author is required and must be at least 5 characters"]
+  }
+  if (!url || url.length < 5) {
+    errors.url = ["URL is required and must be at least 5 characters"]
+  }
+
+  if (Object.keys(errors).length > 0) {
+    return { errors }
+  }
+
+  await addBlog(title, author, url, userId)
 
   revalidatePath("/blogs")
   redirect("/blogs")

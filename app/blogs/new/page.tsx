@@ -1,32 +1,14 @@
-import { createBlog } from "../../actions/blogs"
+import { db } from "@/db"
+import { users } from "@/db/schema"
+import { BlogForm } from "./form"
 
-const NewBlog = () => {
+export default async function NewBlog() {
+  const allUsers = await db.select().from(users)
+
   return (
-    <div>
-      <h2>Create a new blog</h2>
-      <form action={createBlog}>
-        <div>
-          <label>
-            Title
-            <input type="text" name="title" required />
-          </label>
-        </div>
-        <div>
-          <label>
-            Author
-            <input type="text" name="author" required />
-          </label>
-        </div>
-        <div>
-          <label>
-            URL
-            <input type="text" name="url" required />
-          </label>
-        </div>
-        <button type="submit">Create</button>
-      </form>
+    <div className="container mx-auto p-4 max-w-md">
+      <h2 className="text-2xl font-bold mb-6">Create a new blog</h2>
+      <BlogForm users={allUsers} />
     </div>
   )
 }
-
-export default NewBlog
