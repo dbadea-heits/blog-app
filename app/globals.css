@@ -1,26 +1,181 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --color-ink: #0a0908;
+  --color-ink-raised: #14110f;
+  --color-ink-elevated: #1c1814;
+  --color-cream: #f4e9d8;
+  --color-cream-muted: #c9bda9;
+  --color-warm: #8a7d6b;
+  --color-warm-soft: #5e554a;
+  --color-copper: #b87333;
+  --color-copper-bright: #d99452;
+  --color-copper-dim: #8a5524;
+  --color-hairline: #2a251f;
+  --color-hairline-soft: #1f1b16;
+  --color-crimson: #c04848;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-serif: var(--font-serif-loaded), "EB Garamond", Georgia, serif;
+  --font-sans: var(--font-sans-loaded), "Inter", system-ui, -apple-system, sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --ease-base: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --animate-rise: rise 800ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  --animate-drift: drift 1000ms cubic-bezier(0.4, 0, 0.2, 1) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes drift {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Base layer — global element defaults */
+@layer base {
+  *::selection {
+    background: var(--color-copper);
+    color: var(--color-ink);
+  }
+
+  html {
+    background: var(--color-ink);
+  }
+
+  body {
+    background: var(--color-ink);
+    color: var(--color-cream);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0.005em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain — analog warmth on a digital canvas */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.04;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Vignette — subtle edge darkening */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 0%,
+      transparent 50%,
+      rgba(0, 0, 0, 0.4) 100%
+    );
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.015em;
+    color: var(--color-cream);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    font-family: var(--font-sans);
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: inherit;
+  }
+
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+    font-size: 1rem;
+    color: inherit;
+    background: transparent;
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-copper);
+    outline-offset: 4px;
+  }
+}
+
+/* Custom utilities — reusable editorial patterns */
+@utility smallcaps {
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+@utility rule-fade {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-hairline) 15%,
+    var(--color-hairline) 85%,
+    transparent
+  );
+}
+
+@utility rule-mark {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-hairline) 15%,
+    var(--color-hairline) 85%,
+    transparent
+  );
+  position: relative;
+}
+
+@utility rule-mark-after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--color-ink);
+  padding: 0 1rem;
+  color: var(--color-copper);
+  font-size: 0.85rem;
+  content: "✦";
 }
