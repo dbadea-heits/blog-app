@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/app/services/session"
 import { generateToken } from "@/app/actions/users"
+import { CopyTokenButton } from "./copy-token-button"
 
 export default async function MePage() {
   const user = await getCurrentUser()
@@ -39,9 +40,12 @@ export default async function MePage() {
               <p className="smallcaps text-[0.68rem] text-warm">
                 Current token
               </p>
-              <code className="break-all font-mono text-[0.9rem] text-cream">
-                {user.token}
-              </code>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <code className="break-all font-mono text-[0.9rem] text-cream">
+                  {user.token}
+                </code>
+                <CopyTokenButton token={user.token} />
+              </div>
             </div>
           ) : (
             <p className="font-serif italic text-cream-muted">
