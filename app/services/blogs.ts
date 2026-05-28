@@ -42,7 +42,12 @@ export const addBlog = async (
   url: string,
   userId?: number
 ) => {
-  await db.insert(blogs).values({ title, author, url, likes: 0, userId })
+  const [blog] = await db
+    .insert(blogs)
+    .values({ title, author, url, likes: 0, userId })
+    .returning({ id: blogs.id })
+
+  return blog
 }
 
 export const likeBlog = async (id: number) => {

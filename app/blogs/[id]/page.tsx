@@ -1,15 +1,25 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getBlogById } from "../../services/blogs"
-import { likeBlogPost } from "../../actions/blogs"
+import { likeBlogPost, addBlogToReadingListPost } from "../../actions/blogs"
+import { getCurrentUser } from "@/app/services/session"
+import { isBlogInReadingList } from "@/app/services/reading-list"
 
 const BlogPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params
-  const blog = await getBlogById(Number(id))
+  const [blog, currentUser] = await Promise.all([
+    getBlogById(Number(id)),
+    getCurrentUser(),
+  ])
 
   if (!blog) {
     notFound()
   }
+
+  const canAddToReadingList =
+    currentUser &&
+    blog.userId !== currentUser.id &&
+    !(await isBlogInReadingList(currentUser.id, blog.id))
 
   return (
     <main className="animate-drift mx-auto max-w-[720px] px-8 pt-12 pb-24 max-[640px]:px-6 max-[640px]:pt-8 max-[640px]:pb-16">
@@ -111,20 +121,39 @@ const BlogPage = async ({ params }: { params: Promise<{ id: string }> }) => {
             </span>
           </div>
 
-          <form action={likeBlogPost} className="flex">
-            <input type="hidden" name="id" value={blog.id} />
-            <button
-              type="submit"
-              className="group/like relative inline-flex cursor-pointer items-center gap-[0.85rem] overflow-hidden border border-copper bg-transparent px-7 py-4 font-sans text-[0.9rem] tracking-[0.04em] text-copper transition-colors duration-[400ms] ease-[var(--ease-base)] before:absolute before:inset-0 before:-translate-x-[101%] before:bg-copper before:transition-transform before:duration-[400ms] hover:text-ink hover:before:translate-x-0 active:scale-[0.98]"
-            >
-              <span className="relative z-10 text-[0.95rem] transition-transform duration-[400ms] group-hover/like:rotate-[72deg]">
-                ✦
-              </span>
-              <span className="relative z-10 font-serif text-base italic">
-                Mark this piece
-              </span>
-            </button>
-          </form>
+          <div className="flex flex-wrap items-center gap-4">
+            {canAddToReadingList && (
+              <form action={addBlogToReadingListPost} className="flex">
+                <input type="hidden" name="blogId" value={blog.id} />
+                <button
+                  type="submit"
+                  className="group/list relative inline-flex cursor-pointer items-center gap-[0.85rem] overflow-hidden border border-copper bg-transparent px-7 py-4 font-sans text-[0.9rem] tracking-[0.04em] text-copper transition-colors duration-[400ms] ease-[var(--ease-base)] before:absolute before:inset-0 before:-translate-x-[101%] before:bg-copper before:transition-transform before:duration-[400ms] hover:text-ink hover:before:translate-x-0 active:scale-[0.98]"
+                >
+                  <span className="relative z-10 font-serif text-base italic">
+                    Add to reading list
+                  </span>
+                  <span className="relative z-10 text-[0.95rem] transition-transform duration-[400ms] group-hover/list:translate-x-1">
+                    ↗
+                  </span>
+                </button>
+              </form>
+            )}
+
+            <form action={likeBlogPost} className="flex">
+              <input type="hidden" name="id" value={blog.id} />
+              <button
+                type="submit"
+                className="group/like relative inline-flex cursor-pointer items-center gap-[0.85rem] overflow-hidden border border-copper bg-transparent px-7 py-4 font-sans text-[0.9rem] tracking-[0.04em] text-copper transition-colors duration-[400ms] ease-[var(--ease-base)] before:absolute before:inset-0 before:-translate-x-[101%] before:bg-copper before:transition-transform before:duration-[400ms] hover:text-ink hover:before:translate-x-0 active:scale-[0.98]"
+              >
+                <span className="relative z-10 text-[0.95rem] transition-transform duration-[400ms] group-hover/like:rotate-[72deg]">
+                  ✦
+                </span>
+                <span className="relative z-10 font-serif text-base italic">
+                  Mark this piece
+                </span>
+              </button>
+            </form>
+          </div>
         </footer>
       </article>
     </main>

@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation"
+import Link from "next/link"
 import { getCurrentUser } from "@/app/services/session"
 import { generateToken } from "@/app/actions/users"
 import { CopyTokenButton } from "./copy-token-button"
+import { getReadingListForUser } from "@/app/services/reading-list"
 
 export default async function MePage() {
   const user = await getCurrentUser()
@@ -9,6 +11,8 @@ export default async function MePage() {
   if (!user) {
     redirect("/login?callbackUrl=/me")
   }
+
+  const readingList = await getReadingListForUser(user.id)
 
   return (
     <main className="animate-drift mx-auto max-w-[1100px] px-12 pt-20 pb-24 max-[768px]:px-6 max-[768px]:pt-12 max-[768px]:pb-16">
@@ -62,6 +66,57 @@ export default async function MePage() {
             {user.token ? "Regenerate token" : "Generate token"}
           </button>
         </form>
+      </section>
+
+      <section className="animate-rise mt-16 border-t border-hairline pt-12 [animation-delay:300ms]">
+        <div className="mb-8 flex items-center justify-between gap-4">
+          <h2 className="font-sans text-[0.75rem] font-medium tracking-[0.18em] uppercase text-copper">
+            Reading list
+          </h2>
+          <span className="smallcaps text-[0.68rem] text-warm">
+            {readingList.length} {readingList.length === 1 ? "entry" : "entries"}
+          </span>
+        </div>
+
+        {readingList.length === 0 ? (
+          <p className="font-serif italic text-cream-muted">
+            No entries have been added to your reading list yet.
+          </p>
+        ) : (
+          <ol className="list-none border-t border-hairline">
+            {readingList.map((entry, index) => (
+              <li
+                key={entry.id}
+                className="animate-rise border-b border-hairline"
+                style={{ animationDelay: `${index * 70}ms` }}
+              >
+                <div className="grid grid-cols-[auto_1fr_auto] items-center gap-8 px-2 py-8 max-[640px]:grid-cols-1 max-[640px]:gap-4">
+                  <span className="font-sans text-[0.75rem] font-medium tracking-[0.18em] tabular-nums text-copper">
+                    {String(entry.blogId).padStart(3, "0")}
+                  </span>
+
+                  <div className="flex min-w-0 flex-col gap-2">
+                    <Link
+                      href={`/blogs/${entry.blogId}`}
+                      className="font-serif text-[clamp(1.25rem,2.5vw,1.9rem)] leading-[1.1] font-medium tracking-[-0.02em] text-cream transition-colors duration-[400ms] ease-[var(--ease-base)] hover:text-copper-bright"
+                    >
+                      {entry.title}
+                    </Link>
+                    <span className="font-serif text-base italic text-cream-muted">
+                      {entry.author}
+                    </span>
+                  </div>
+
+                  <span
+                    className={`smallcaps text-[0.65rem] ${entry.read ? "text-warm" : "text-copper"}`}
+                  >
+                    {entry.read ? "Read" : "Unread"}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ol>
+        )}
       </section>
     </main>
   )

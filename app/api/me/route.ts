@@ -15,6 +15,39 @@ export async function GET(request: NextRequest) {
 
   const user = await db.query.users.findFirst({
     where: eq(users.token, token),
+    columns: {
+      id: true,
+      username: true,
+      name: true,
+    },
+    with: {
+      blogs: {
+        columns: {
+          id: true,
+          title: true,
+          author: true,
+          url: true,
+          likes: true,
+        },
+      },
+      readingList: {
+        columns: {
+          id: true,
+          read: true,
+        },
+        with: {
+          blog: {
+            columns: {
+              id: true,
+              title: true,
+              author: true,
+              url: true,
+              likes: true,
+            },
+          },
+        },
+      },
+    },
   })
 
   if (!user) {
@@ -25,5 +58,11 @@ export async function GET(request: NextRequest) {
     id: user.id,
     username: user.username,
     name: user.name,
+    blogs: user.blogs,
+    readingList: user.readingList.map((entry) => ({
+      id: entry.id,
+      read: entry.read,
+      blog: entry.blog,
+    })),
   })
 }
