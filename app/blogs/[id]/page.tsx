@@ -35,7 +35,7 @@ const BlogPage = async ({ params }: { params: Promise<{ id: string }> }) => {
         </span>
       </Link>
 
-      <article>
+      <article data-testid="blog-detail">
         <header className="animate-rise mb-16 [animation-delay:200ms] max-[640px]:mb-10">
           <div className="mb-10 flex items-center gap-4">
             <span className="smallcaps text-[0.68rem]">
@@ -45,7 +45,10 @@ const BlogPage = async ({ params }: { params: Promise<{ id: string }> }) => {
             <span className="smallcaps text-[0.68rem]">The Reading Room</span>
           </div>
 
-          <h1 className="mb-12 font-serif text-[clamp(2.5rem,6.5vw,5rem)] leading-none font-medium tracking-[-0.03em] text-cream">
+          <h1
+            data-testid="blog-title"
+            className="mb-12 font-serif text-[clamp(2.5rem,6.5vw,5rem)] leading-none font-medium tracking-[-0.03em] text-cream"
+          >
             {blog.title}
           </h1>
 
@@ -56,6 +59,7 @@ const BlogPage = async ({ params }: { params: Promise<{ id: string }> }) => {
                 href={blog.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-testid="blog-author"
                 className="relative inline-flex items-baseline gap-[0.4rem] font-serif text-[1.4rem] font-medium italic text-cream no-underline transition-colors duration-[400ms] ease-[var(--ease-base)] after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-copper after:transition-transform after:duration-[400ms] hover:text-copper hover:after:scale-x-100"
               >
                 {blog.author}
@@ -127,6 +131,7 @@ const BlogPage = async ({ params }: { params: Promise<{ id: string }> }) => {
                 <input type="hidden" name="blogId" value={blog.id} />
                 <button
                   type="submit"
+                  data-testid="add-to-reading-list-button"
                   className="group/list relative inline-flex cursor-pointer items-center gap-[0.85rem] overflow-hidden border border-copper bg-transparent px-7 py-4 font-sans text-[0.9rem] tracking-[0.04em] text-copper transition-colors duration-[400ms] ease-[var(--ease-base)] before:absolute before:inset-0 before:-translate-x-[101%] before:bg-copper before:transition-transform before:duration-[400ms] hover:text-ink hover:before:translate-x-0 active:scale-[0.98]"
                 >
                   <span className="relative z-10 font-serif text-base italic">

@@ -27,6 +27,7 @@ export function Nav() {
         <div className="flex justify-center gap-12 max-[900px]:flex-wrap max-[900px]:justify-start max-[900px]:gap-6">
           <Link
             href="/blogs"
+            aria-label="blogs"
             className="group/link relative flex items-baseline gap-2 py-2 text-[0.9rem] font-normal text-cream-muted transition-colors duration-[400ms] ease-[var(--ease-base)] after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-copper after:transition-transform after:duration-[400ms] hover:text-cream hover:after:scale-x-100"
           >
             <span className="text-[0.7rem] text-copper opacity-70 tabular-nums tracking-[0.05em] transition-opacity duration-[400ms] group-hover/link:opacity-100">
@@ -36,6 +37,7 @@ export function Nav() {
           </Link>
           <Link
             href="/users"
+            aria-label="users"
             className="group/link relative flex items-baseline gap-2 py-2 text-[0.9rem] font-normal text-cream-muted transition-colors duration-[400ms] ease-[var(--ease-base)] after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-copper after:transition-transform after:duration-[400ms] hover:text-cream hover:after:scale-x-100"
           >
             <span className="text-[0.7rem] text-copper opacity-70 tabular-nums tracking-[0.05em] transition-opacity duration-[400ms] group-hover/link:opacity-100">
@@ -61,6 +63,7 @@ export function Nav() {
             <>
               <Link
                 href="/me"
+                aria-label="me"
                 className="flex flex-col items-end gap-[0.1rem] leading-tight transition-opacity duration-[400ms] hover:opacity-70"
               >
                 <span className="smallcaps text-warm">signed in</span>
@@ -72,22 +75,24 @@ export function Nav() {
                 onClick={() => signOut({ redirectTo: "/" })}
                 className="relative cursor-pointer border-none bg-none py-2 text-[0.85rem] font-normal text-cream-muted transition-colors duration-[400ms] ease-[var(--ease-base)] after:absolute after:inset-x-0 after:bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-copper after:transition-transform after:duration-[400ms] hover:text-copper hover:after:scale-x-100"
               >
-                Sign out
+                Logout
               </button>
             </>
           ) : (
             <>
               <Link
                 href="/login"
+                aria-label="login"
                 className="relative py-2 text-[0.9rem] text-cream-muted transition-colors duration-[400ms] ease-[var(--ease-base)] after:absolute after:inset-x-0 after:bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-copper after:transition-transform after:duration-[400ms] hover:text-cream hover:after:scale-x-100"
               >
-                Sign in
+                login
               </Link>
               <Link
                 href="/register"
+                aria-label="register"
                 className="group/sub relative isolate flex items-center gap-[0.6rem] overflow-hidden border border-copper px-[1.4rem] py-[0.7rem] text-[0.85rem] font-medium tracking-[0.04em] text-copper-bright transition-colors duration-[400ms] ease-[var(--ease-base)] before:absolute before:inset-0 before:-z-10 before:translate-y-full before:bg-copper before:transition-transform before:duration-[400ms] hover:text-ink hover:before:translate-y-0"
               >
-                <span>Subscribe</span>
+                <span>register</span>
                 <span className="text-[0.95rem] transition-transform duration-[400ms] group-hover/sub:translate-x-[2px] group-hover/sub:-translate-y-[2px]">
                   ↗
                 </span>

@@ -10,7 +10,7 @@ export default async function MePage() {
   const user = await getCurrentUser()
 
   if (!user) {
-    redirect("/login?callbackUrl=/me")
+    redirect("/login")
   }
 
   const readingList = await getReadingListForUser(user.id)
@@ -19,43 +19,58 @@ export default async function MePage() {
 
   return (
     <main className="animate-drift mx-auto max-w-[1100px] px-12 pt-20 pb-24 max-[768px]:px-6 max-[768px]:pt-12 max-[768px]:pb-16">
-      <header className="animate-rise mb-20 [animation-delay:100ms] max-[768px]:mb-12">
+      <header
+        data-testid="user-profile"
+        className="animate-rise mb-20 [animation-delay:100ms] max-[768px]:mb-12"
+      >
         <div className="mb-10 flex items-center gap-4">
           <span className="smallcaps text-[0.68rem]">§ me</span>
           <span className="h-px w-8 bg-copper opacity-50" />
           <span className="smallcaps text-[0.68rem]">Your Profile</span>
         </div>
 
-        <h1 className="mb-10 font-serif text-[clamp(3rem,7vw,6rem)] leading-[0.95] font-medium tracking-[-0.04em] text-cream">
+        <h1
+          data-testid="user-name"
+          className="mb-10 font-serif text-[clamp(3rem,7vw,6rem)] leading-[0.95] font-medium tracking-[-0.04em] text-cream"
+        >
           Hello,{" "}
           <em className="font-normal text-copper italic">{user.name}</em>.
         </h1>
 
-        <p className="border-t border-hairline pt-8 font-serif text-[1.1rem] italic text-cream-muted">
+        <p
+          data-testid="user-username"
+          className="border-t border-hairline pt-8 font-serif text-[1.1rem] italic text-cream-muted"
+        >
           @{user.username}
         </p>
       </header>
 
-      <section className="animate-rise border-t border-hairline pt-12 [animation-delay:200ms]">
+      <section
+        data-testid="api-token-section"
+        className="animate-rise border-t border-hairline pt-12 [animation-delay:200ms]"
+      >
         <h2 className="mb-2 font-sans text-[0.75rem] font-medium tracking-[0.18em] uppercase text-copper">
           API Token
         </h2>
 
         <div className="mt-6 rounded-sm border border-hairline bg-ink-raised p-8">
           {user.token ? (
-            <div className="flex flex-col gap-4">
+            <div data-testid="token-display" className="flex flex-col gap-4">
               <p className="smallcaps text-[0.68rem] text-warm">
                 Current token
               </p>
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <code className="break-all font-mono text-[0.9rem] text-cream">
+                <code
+                  data-testid="api-token"
+                  className="break-all font-mono text-[0.9rem] text-cream"
+                >
                   {user.token}
                 </code>
                 <CopyTokenButton token={user.token} />
               </div>
             </div>
           ) : (
-            <p className="font-serif italic text-cream-muted">
+            <p data-testid="no-token-message" className="font-serif italic text-cream-muted">
               No token has been generated yet.
             </p>
           )}
@@ -64,6 +79,7 @@ export default async function MePage() {
         <form action={generateToken} className="mt-6">
           <button
             type="submit"
+            data-testid="generate-token-button"
             className="cursor-pointer border border-copper bg-transparent px-8 py-3 font-sans text-[0.85rem] tracking-[0.1em] uppercase text-copper transition-all duration-[400ms] ease-[var(--ease-base)] hover:bg-copper hover:text-ink"
           >
             {user.token ? "Regenerate token" : "Generate token"}
@@ -71,7 +87,10 @@ export default async function MePage() {
         </form>
       </section>
 
-      <section className="animate-rise mt-16 border-t border-hairline pt-12 [animation-delay:300ms]">
+      <section
+        data-testid="reading-list-section"
+        className="animate-rise mt-16 border-t border-hairline pt-12 [animation-delay:300ms]"
+      >
         <div className="mb-10 flex items-center justify-between gap-4 max-[640px]:items-start max-[640px]:flex-col">
           <div>
             <h2 className="font-sans text-[0.75rem] font-medium tracking-[0.18em] uppercase text-copper">
@@ -88,12 +107,12 @@ export default async function MePage() {
         </div>
 
         {readingList.length === 0 ? (
-          <p className="font-serif italic text-cream-muted">
+          <p data-testid="empty-reading-list" className="font-serif italic text-cream-muted">
             No entries have been added to your reading list yet.
           </p>
         ) : (
           <div className="grid gap-10">
-            <section className="rounded-sm border border-hairline bg-ink-raised/70 p-6">
+            <section data-testid="unread-section" className="rounded-sm border border-hairline bg-ink-raised/70 p-6">
               <div className="mb-6 flex items-center justify-between gap-4">
                 <h3 className="font-sans text-[0.7rem] font-medium tracking-[0.2em] uppercase text-copper">
                   Unread
@@ -104,7 +123,7 @@ export default async function MePage() {
               </div>
 
               {unreadEntries.length === 0 ? (
-                <p className="font-serif italic text-cream-muted">
+                <p data-testid="no-unread-blogs" className="font-serif italic text-cream-muted">
                   Nothing is waiting to be read.
                 </p>
               ) : (
@@ -136,6 +155,7 @@ export default async function MePage() {
                             <input type="hidden" name="entryId" value={entry.id} />
                             <button
                               type="submit"
+                              data-testid={`mark-read-${entry.id}`}
                               className="cursor-pointer border border-copper px-4 py-2 font-sans text-[0.75rem] tracking-[0.14em] uppercase text-copper transition-colors duration-[400ms] ease-[var(--ease-base)] hover:bg-copper hover:text-ink"
                             >
                               Mark as read

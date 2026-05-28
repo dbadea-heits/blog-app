@@ -29,6 +29,7 @@ export function BlogForm({ users }: { users: User[] }) {
   return (
     <form
       action={formAction}
+      noValidate
       className="animate-rise flex flex-col gap-10 [animation-delay:350ms]"
     >
       <div className={fieldClass}>
@@ -40,6 +41,7 @@ export function BlogForm({ users }: { users: User[] }) {
           type="text"
           id="title"
           name="title"
+          aria-label="Title"
           required
           minLength={5}
           placeholder="The piece you would like to add"
@@ -47,7 +49,9 @@ export function BlogForm({ users }: { users: User[] }) {
           disabled={isPending}
         />
         {state.errors?.title && (
-          <p className={errorClass}>— {state.errors.title[0]}</p>
+          <p data-testid="title-error" className={errorClass}>
+            — {state.errors.title[0]}
+          </p>
         )}
       </div>
 
@@ -60,6 +64,7 @@ export function BlogForm({ users }: { users: User[] }) {
           type="text"
           id="author"
           name="author"
+          aria-label="Author"
           required
           minLength={5}
           placeholder="Whose words are these"
@@ -67,7 +72,9 @@ export function BlogForm({ users }: { users: User[] }) {
           disabled={isPending}
         />
         {state.errors?.author && (
-          <p className={errorClass}>— {state.errors.author[0]}</p>
+          <p data-testid="author-error" className={errorClass}>
+            — {state.errors.author[0]}
+          </p>
         )}
       </div>
 
@@ -80,6 +87,7 @@ export function BlogForm({ users }: { users: User[] }) {
           type="text"
           id="url"
           name="url"
+          aria-label="URL"
           required
           minLength={5}
           placeholder="https://"
@@ -87,7 +95,9 @@ export function BlogForm({ users }: { users: User[] }) {
           disabled={isPending}
         />
         {state.errors?.url && (
-          <p className={errorClass}>— {state.errors.url[0]}</p>
+          <p data-testid="url-error" className={errorClass}>
+            — {state.errors.url[0]}
+          </p>
         )}
       </div>
 
@@ -129,11 +139,13 @@ export function BlogForm({ users }: { users: User[] }) {
       <div className="flex justify-end pt-6">
         <button
           type="submit"
+          data-testid="create-blog-button"
+          aria-label="Create"
           disabled={isPending}
           className="group/submit relative inline-flex cursor-pointer items-center gap-4 overflow-hidden border border-copper bg-copper px-9 py-[1.1rem] text-ink transition-colors duration-[400ms] ease-[var(--ease-base)] before:absolute before:inset-0 before:-translate-x-[101%] before:bg-ink before:transition-transform before:duration-[400ms] hover:not-disabled:text-copper hover:not-disabled:before:translate-x-0 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <span className="relative z-10 font-serif text-[1.1rem] font-medium italic">
-            {isPending ? "Sending to press…" : "Send to press"}
+            {isPending ? "Creating..." : "Create"}
           </span>
           <span className="relative z-10 text-[1.1rem] transition-transform duration-[400ms] group-hover/submit:not-disabled:translate-x-1.5">
             {isPending ? "✦" : "→"}

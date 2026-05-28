@@ -67,7 +67,7 @@ export const createBlog = async (
 
   revalidatePath("/blogs")
   revalidatePath("/me")
-  return { success: true }
+  redirect("/blogs")
 }
 
 export const likeBlogPost = async (formData: FormData) => {

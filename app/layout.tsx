@@ -34,6 +34,12 @@ export default function RootLayout({
       <body>
         <Providers>
           <Nav />
+          <div
+            data-testid="notification"
+            className="mx-auto max-w-[1400px] px-12 pt-3 text-right font-sans text-[0.72rem] tracking-[0.08em] uppercase text-warm max-[900px]:px-6"
+          >
+            System ready
+          </div>
           {children}
         </Providers>
       </body>

@@ -50,6 +50,7 @@ const Blogs = async ({
             <input
               type="text"
               name="filter"
+              data-testid="filter-input"
               placeholder="by title…"
               defaultValue={filter || ""}
               aria-label="Search articles by title"
@@ -57,6 +58,7 @@ const Blogs = async ({
             />
             <button
               type="submit"
+              data-testid="search-button"
               className="cursor-pointer border-none bg-transparent px-2 py-1.5 text-[1.1rem] text-copper transition-all duration-[400ms] ease-[var(--ease-base)] hover:translate-x-0.5 hover:text-copper-bright"
             >
               ↵
@@ -66,7 +68,7 @@ const Blogs = async ({
       </header>
 
       {filteredBlogs.length > 0 ? (
-        <ol className="list-none border-t border-hairline">
+        <ol data-testid="blogs-list" className="list-none border-t border-hairline">
           {filteredBlogs.map((blog, index) => {
             const issueNum = String(filteredBlogs.length - index).padStart(
               3,
@@ -97,6 +99,7 @@ const Blogs = async ({
                           {blog.author}
                         </em>
                       </span>
+                      <span>{blog.likes} likes</span>
                       {blog.username && blog.userName && (
                         <>
                           <span className="text-copper opacity-70">—</span>

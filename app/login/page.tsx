@@ -87,6 +87,7 @@ function LoginFormContent() {
           {error && (
             <div
               role="alert"
+              data-testid="error-message"
               className="animate-rise flex items-start gap-[0.85rem] border-l-2 border-crimson bg-[rgba(192,72,72,0.06)] px-5 py-4"
             >
               <span className="font-serif text-[1.3rem] leading-none italic text-crimson">
@@ -112,6 +113,7 @@ function LoginFormContent() {
               type="text"
               id="username"
               name="username"
+              aria-label="Username"
               required
               placeholder="Your username"
               disabled={isLoading}
@@ -134,6 +136,7 @@ function LoginFormContent() {
               type="password"
               id="password"
               name="password"
+              aria-label="Password"
               required
               placeholder="••••••••"
               disabled={isLoading}
@@ -144,11 +147,12 @@ function LoginFormContent() {
 
           <button
             type="submit"
+            data-testid="login-button"
             disabled={isLoading}
             className="group/submit relative mt-4 inline-flex cursor-pointer items-center justify-between gap-4 overflow-hidden border border-cream bg-transparent px-6 py-[1.1rem] text-cream transition-colors duration-[400ms] ease-[var(--ease-base)] before:absolute before:inset-0 before:translate-y-[101%] before:bg-cream before:transition-transform before:duration-[400ms] hover:not-disabled:text-ink hover:not-disabled:before:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
           >
             <span className="relative z-10 font-serif text-[1.1rem] font-medium italic">
-              {isLoading ? "Opening the door…" : "Open the door"}
+              {isLoading ? "Logging in..." : "Login"}
             </span>
             <span className="relative z-10 text-[1.1rem] transition-transform duration-[400ms] group-hover/submit:not-disabled:translate-x-1.5">
               {isLoading ? "✦" : "→"}

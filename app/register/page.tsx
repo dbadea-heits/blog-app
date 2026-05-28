@@ -83,6 +83,7 @@ export default function RegisterPage() {
       <div className="flex items-center justify-start px-12 py-16 max-[900px]:px-6 max-[900px]:py-12">
         <form
           action={formAction}
+          noValidate
           className="animate-rise flex w-full max-w-[26rem] flex-col gap-9 [animation-delay:250ms]"
         >
           <div className={fieldShellClass}>
@@ -95,6 +96,7 @@ export default function RegisterPage() {
               type="text"
               id="username"
               name="username"
+              aria-label="Username"
               required
               minLength={4}
               placeholder="your-handle"
@@ -105,7 +107,9 @@ export default function RegisterPage() {
               aria-invalid={!!state.errors?.username}
             />
             {state.errors?.username && (
-              <p className={errorClass}>— {state.errors.username}</p>
+              <p data-testid="username-error" className={errorClass}>
+                — {state.errors.username}
+              </p>
             )}
           </div>
 
@@ -119,6 +123,7 @@ export default function RegisterPage() {
               type="text"
               id="name"
               name="name"
+              aria-label="Name"
               required
               placeholder="Your given name"
               defaultValue={state.values?.name}
@@ -128,7 +133,9 @@ export default function RegisterPage() {
               aria-invalid={!!state.errors?.name}
             />
             {state.errors?.name && (
-              <p className={errorClass}>— {state.errors.name}</p>
+              <p data-testid="name-error" className={errorClass}>
+                — {state.errors.name}
+              </p>
             )}
           </div>
 
@@ -142,6 +149,7 @@ export default function RegisterPage() {
               type="password"
               id="password"
               name="password"
+              aria-label="Password"
               required
               minLength={4}
               placeholder="••••••••"
@@ -151,7 +159,9 @@ export default function RegisterPage() {
               aria-invalid={!!state.errors?.password}
             />
             {state.errors?.password && (
-              <p className={errorClass}>— {state.errors.password}</p>
+              <p data-testid="password-error" className={errorClass}>
+                — {state.errors.password}
+              </p>
             )}
           </div>
 
@@ -165,6 +175,7 @@ export default function RegisterPage() {
               type="password"
               id="passwordConfirm"
               name="passwordConfirm"
+              aria-label="Confirm Password"
               required
               minLength={4}
               placeholder="••••••••"
@@ -174,12 +185,15 @@ export default function RegisterPage() {
               aria-invalid={!!state.errors?.passwordConfirm}
             />
             {state.errors?.passwordConfirm && (
-              <p className={errorClass}>— {state.errors.passwordConfirm}</p>
+              <p data-testid="passwordConfirm-error" className={errorClass}>
+                — {state.errors.passwordConfirm}
+              </p>
             )}
           </div>
 
           <button
             type="submit"
+            data-testid="register-button"
             disabled={isPending}
             className="group/submit relative mt-4 inline-flex cursor-pointer items-center justify-between gap-4 overflow-hidden border border-copper bg-copper px-6 py-[1.1rem] text-ink transition-colors duration-[400ms] ease-[var(--ease-base)] before:absolute before:inset-0 before:translate-y-[101%] before:bg-ink before:transition-transform before:duration-[400ms] hover:not-disabled:text-copper hover:not-disabled:before:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
           >
