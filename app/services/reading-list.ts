@@ -39,3 +39,7 @@ export const getReadingListForUser = async (userId: number) => {
     .where(eq(readingList.userId, userId))
     .orderBy(desc(readingList.id))
 }
+
+export const markReadingListEntryAsRead = async (entryId: number) => {
+  await db.update(readingList).set({ read: true }).where(eq(readingList.id, entryId))
+}

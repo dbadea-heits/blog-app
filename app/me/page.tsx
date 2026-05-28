@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/app/services/session"
 import { generateToken } from "@/app/actions/users"
 import { CopyTokenButton } from "./copy-token-button"
 import { getReadingListForUser } from "@/app/services/reading-list"
+import { markAsRead } from "@/app/actions/reading-list"
 
 export default async function MePage() {
   const user = await getCurrentUser()
@@ -13,6 +14,8 @@ export default async function MePage() {
   }
 
   const readingList = await getReadingListForUser(user.id)
+  const unreadEntries = readingList.filter((entry) => !entry.read)
+  const readEntries = readingList.filter((entry) => entry.read)
 
   return (
     <main className="animate-drift mx-auto max-w-[1100px] px-12 pt-20 pb-24 max-[768px]:px-6 max-[768px]:pt-12 max-[768px]:pb-16">
@@ -69,10 +72,16 @@ export default async function MePage() {
       </section>
 
       <section className="animate-rise mt-16 border-t border-hairline pt-12 [animation-delay:300ms]">
-        <div className="mb-8 flex items-center justify-between gap-4">
-          <h2 className="font-sans text-[0.75rem] font-medium tracking-[0.18em] uppercase text-copper">
-            Reading list
-          </h2>
+        <div className="mb-10 flex items-center justify-between gap-4 max-[640px]:items-start max-[640px]:flex-col">
+          <div>
+            <h2 className="font-sans text-[0.75rem] font-medium tracking-[0.18em] uppercase text-copper">
+              Reading list
+            </h2>
+            <p className="mt-3 max-w-[32rem] font-serif text-[1.05rem] italic text-cream-muted">
+              Unread entries stay at the top so the next thing to read is always
+              in front of you.
+            </p>
+          </div>
           <span className="smallcaps text-[0.68rem] text-warm">
             {readingList.length} {readingList.length === 1 ? "entry" : "entries"}
           </span>
@@ -83,39 +92,108 @@ export default async function MePage() {
             No entries have been added to your reading list yet.
           </p>
         ) : (
-          <ol className="list-none border-t border-hairline">
-            {readingList.map((entry, index) => (
-              <li
-                key={entry.id}
-                className="animate-rise border-b border-hairline"
-                style={{ animationDelay: `${index * 70}ms` }}
-              >
-                <div className="grid grid-cols-[auto_1fr_auto] items-center gap-8 px-2 py-8 max-[640px]:grid-cols-1 max-[640px]:gap-4">
-                  <span className="font-sans text-[0.75rem] font-medium tracking-[0.18em] tabular-nums text-copper">
-                    {String(entry.blogId).padStart(3, "0")}
-                  </span>
+          <div className="grid gap-10">
+            <section className="rounded-sm border border-hairline bg-ink-raised/70 p-6">
+              <div className="mb-6 flex items-center justify-between gap-4">
+                <h3 className="font-sans text-[0.7rem] font-medium tracking-[0.2em] uppercase text-copper">
+                  Unread
+                </h3>
+                <span className="smallcaps text-[0.65rem] text-warm">
+                  {unreadEntries.length}
+                </span>
+              </div>
 
-                  <div className="flex min-w-0 flex-col gap-2">
-                    <Link
-                      href={`/blogs/${entry.blogId}`}
-                      className="font-serif text-[clamp(1.25rem,2.5vw,1.9rem)] leading-[1.1] font-medium tracking-[-0.02em] text-cream transition-colors duration-[400ms] ease-[var(--ease-base)] hover:text-copper-bright"
+              {unreadEntries.length === 0 ? (
+                <p className="font-serif italic text-cream-muted">
+                  Nothing is waiting to be read.
+                </p>
+              ) : (
+                <ol className="grid gap-4">
+                  {unreadEntries.map((entry, index) => (
+                    <li
+                      key={entry.id}
+                      className="animate-rise rounded-sm border border-hairline bg-ink/40 p-5"
+                      style={{ animationDelay: `${index * 60}ms` }}
                     >
-                      {entry.title}
-                    </Link>
-                    <span className="font-serif text-base italic text-cream-muted">
-                      {entry.author}
-                    </span>
-                  </div>
+                      <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                        <div className="min-w-0">
+                          <Link
+                            href={`/blogs/${entry.blogId}`}
+                            className="block font-serif text-[clamp(1.2rem,2vw,1.7rem)] leading-[1.1] font-medium tracking-[-0.02em] text-cream transition-colors duration-[400ms] ease-[var(--ease-base)] hover:text-copper-bright"
+                          >
+                            {entry.title}
+                          </Link>
+                          <p className="mt-2 font-serif text-base italic text-cream-muted">
+                            {entry.author}
+                          </p>
+                        </div>
 
-                  <span
-                    className={`smallcaps text-[0.65rem] ${entry.read ? "text-warm" : "text-copper"}`}
-                  >
-                    {entry.read ? "Read" : "Unread"}
-                  </span>
-                </div>
-              </li>
-            ))}
-          </ol>
+                        <div className="flex flex-wrap items-center gap-3">
+                          <span className="smallcaps text-[0.65rem] text-copper">
+                            unread
+                          </span>
+                          <form action={markAsRead} className="flex">
+                            <input type="hidden" name="entryId" value={entry.id} />
+                            <button
+                              type="submit"
+                              className="cursor-pointer border border-copper px-4 py-2 font-sans text-[0.75rem] tracking-[0.14em] uppercase text-copper transition-colors duration-[400ms] ease-[var(--ease-base)] hover:bg-copper hover:text-ink"
+                            >
+                              Mark as read
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </section>
+
+            <section className="rounded-sm border border-hairline bg-ink-raised/50 p-6">
+              <div className="mb-6 flex items-center justify-between gap-4">
+                <h3 className="font-sans text-[0.7rem] font-medium tracking-[0.2em] uppercase text-warm">
+                  Read
+                </h3>
+                <span className="smallcaps text-[0.65rem] text-warm">
+                  {readEntries.length}
+                </span>
+              </div>
+
+              {readEntries.length === 0 ? (
+                <p className="font-serif italic text-cream-muted">
+                  Nothing has been marked as read yet.
+                </p>
+              ) : (
+                <ol className="grid gap-4">
+                  {readEntries.map((entry, index) => (
+                    <li
+                      key={entry.id}
+                      className="animate-rise rounded-sm border border-hairline/80 bg-ink/20 p-5"
+                      style={{ animationDelay: `${index * 60}ms` }}
+                    >
+                      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                        <div className="min-w-0">
+                          <Link
+                            href={`/blogs/${entry.blogId}`}
+                            className="block font-serif text-[clamp(1.1rem,1.8vw,1.55rem)] leading-[1.1] font-medium tracking-[-0.02em] text-cream transition-colors duration-[400ms] ease-[var(--ease-base)] hover:text-copper-bright"
+                          >
+                            {entry.title}
+                          </Link>
+                          <p className="mt-2 font-serif text-base italic text-cream-muted">
+                            {entry.author}
+                          </p>
+                        </div>
+
+                        <span className="smallcaps text-[0.65rem] text-warm">
+                          read
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </section>
+          </div>
         )}
       </section>
     </main>
